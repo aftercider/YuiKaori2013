@@ -45,7 +45,7 @@ import android.widget.TextView;
  * by the system.
  */
 class YuiKaoriSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
-    class LunarThread extends Thread {
+    class YuiKaoriThread extends Thread {
         /*
          * Difficulty setting constants
          */
@@ -211,7 +211,7 @@ class YuiKaoriSurfaceView extends SurfaceView implements SurfaceHolder.Callback 
         /** Y of lander center. */
         private double mY;
 
-        public LunarThread(SurfaceHolder surfaceHolder, Context context,
+        public YuiKaoriThread(SurfaceHolder surfaceHolder, Context context,
                 Handler handler) {
             // get handles to some important objects
             mSurfaceHolder = surfaceHolder;
@@ -784,7 +784,7 @@ class YuiKaoriSurfaceView extends SurfaceView implements SurfaceHolder.Callback 
     private TextView mStatusText;
 
     /** The thread that actually draws the animation */
-    private LunarThread thread;
+    private YuiKaoriThread thread;
 
     public YuiKaoriSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -794,7 +794,7 @@ class YuiKaoriSurfaceView extends SurfaceView implements SurfaceHolder.Callback 
         holder.addCallback(this);
 
         // create thread only; it's started in surfaceCreated()
-        thread = new LunarThread(holder, context, new Handler() {
+        thread = new YuiKaoriThread(holder, context, new Handler() {
             @Override
             public void handleMessage(Message m) {
                 mStatusText.setVisibility(m.getData().getInt("viz"));
@@ -810,7 +810,7 @@ class YuiKaoriSurfaceView extends SurfaceView implements SurfaceHolder.Callback 
      * 
      * @return the animation thread
      */
-    public LunarThread getThread() {
+    public YuiKaoriThread getThread() {
         return thread;
     }
 

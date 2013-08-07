@@ -24,17 +24,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.aftercider.yuikaori2013.YuiKaoriSurfaceView.LunarThread;
+import com.aftercider.yuikaori2013.YuiKaoriSurfaceView.YuiKaoriThread;
 
-/**
- * This is a simple YuiKaoriActivity activity that houses a single YuiKaoriSurfaceView. It
- * demonstrates...
- * <ul>
- * <li>animating by calling invalidate() from draw()
- * <li>loading and drawing resources
- * <li>handling onPause() in an animation
- * </ul>
- */
 public class YuiKaoriActivity extends Activity {
     private static final int MENU_EASY = 1;
 
@@ -51,10 +42,10 @@ public class YuiKaoriActivity extends Activity {
     private static final int MENU_STOP = 7;
 
     /** A handle to the thread that's actually running the animation. */
-    private LunarThread mLunarThread;
+    private YuiKaoriThread mYuiKaoriThread;
 
     /** A handle to the View in which the game is running. */
-    private YuiKaoriSurfaceView mLunarView;
+    private YuiKaoriSurfaceView mYuiKaoriView;
 
     /**
      * Invoked during init to give the Activity a chance to set up its Menu.
@@ -88,26 +79,26 @@ public class YuiKaoriActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_START:
-                mLunarThread.doStart();
+                mYuiKaoriThread.doStart();
                 return true;
             case MENU_STOP:
-                mLunarThread.setState(LunarThread.STATE_LOSE,
+                mYuiKaoriThread.setState(YuiKaoriThread.STATE_LOSE,
                         getText(R.string.message_stopped));
                 return true;
             case MENU_PAUSE:
-                mLunarThread.pause();
+                mYuiKaoriThread.pause();
                 return true;
             case MENU_RESUME:
-                mLunarThread.unpause();
+                mYuiKaoriThread.unpause();
                 return true;
             case MENU_EASY:
-                mLunarThread.setDifficulty(LunarThread.DIFFICULTY_EASY);
+                mYuiKaoriThread.setDifficulty(YuiKaoriThread.DIFFICULTY_EASY);
                 return true;
             case MENU_MEDIUM:
-                mLunarThread.setDifficulty(LunarThread.DIFFICULTY_MEDIUM);
+                mYuiKaoriThread.setDifficulty(YuiKaoriThread.DIFFICULTY_MEDIUM);
                 return true;
             case MENU_HARD:
-                mLunarThread.setDifficulty(LunarThread.DIFFICULTY_HARD);
+                mYuiKaoriThread.setDifficulty(YuiKaoriThread.DIFFICULTY_HARD);
                 return true;
         }
 
@@ -130,20 +121,20 @@ public class YuiKaoriActivity extends Activity {
         // tell system to use the layout defined in our XML file
         setContentView(R.layout.lunar_layout);
 
-        // get handles to the YuiKaoriSurfaceView from XML, and its LunarThread
-        mLunarView = (YuiKaoriSurfaceView) findViewById(R.id.lunar);
-        mLunarThread = mLunarView.getThread();
+        // get handles to the YuiKaoriSurfaceView from XML, and its YuiKaoriThread
+        mYuiKaoriView = (YuiKaoriSurfaceView) findViewById(R.id.lunar);
+        mYuiKaoriThread = mYuiKaoriView.getThread();
 
         // give the YuiKaoriSurfaceView a handle to the TextView used for messages
-        mLunarView.setTextView((TextView) findViewById(R.id.text));
+        mYuiKaoriView.setTextView((TextView) findViewById(R.id.text));
 
         if (savedInstanceState == null) {
             // we were just launched: set up a new game
-            mLunarThread.setState(LunarThread.STATE_READY);
+            mYuiKaoriThread.setState(YuiKaoriThread.STATE_READY);
             Log.w(this.getClass().getName(), "SIS is null");
         } else {
             // we are being restored: resume a previous game
-            mLunarThread.restoreState(savedInstanceState);
+            mYuiKaoriThread.restoreState(savedInstanceState);
             Log.w(this.getClass().getName(), "SIS is nonnull");
         }
     }
@@ -154,7 +145,7 @@ public class YuiKaoriActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        mLunarView.getThread().pause(); // pause game when Activity pauses
+        mYuiKaoriView.getThread().pause(); // pause game when Activity pauses
     }
 
     /**
@@ -167,7 +158,7 @@ public class YuiKaoriActivity extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         // just have the View's thread save its state into our Bundle
         super.onSaveInstanceState(outState);
-        mLunarThread.saveState(outState);
+        mYuiKaoriThread.saveState(outState);
         Log.w(this.getClass().getName(), "SIS called");
     }
 }
