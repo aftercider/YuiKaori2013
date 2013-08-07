@@ -66,7 +66,7 @@ public class YuiKaoriActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        mYuiKaoriView.getThread().setState(YuiKaoriThread.STATE_END); // pause game when Activity pauses
+        mYuiKaoriView.getThread().setRunning(false);
         finish();
     }
 
