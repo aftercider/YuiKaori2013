@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.aftercider.yuikaori2013.YuiKaoriSurfaceView.YuiKaoriThread;
@@ -27,9 +28,9 @@ import com.aftercider.yuikaori2013.YuiKaoriSurfaceView.YuiKaoriThread;
 public class YuiKaoriActivity extends Activity {
     /** A handle to the thread that's actually running the animation. */
     private YuiKaoriThread mYuiKaoriThread;
-
-    /** A handle to the View in which the game is running. */
     private YuiKaoriSurfaceView mYuiKaoriView;
+    private Button mYuiButton;
+    private Button mKaoriButton;
 
     /**
      * Invoked when the Activity is created.
@@ -41,13 +42,9 @@ public class YuiKaoriActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // turn off the window's title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        // tell system to use the layout defined in our XML file
         setContentView(R.layout.lunar_layout);
 
-        // get handles to the YuiKaoriSurfaceView from XML, and its YuiKaoriThread
         mYuiKaoriView   = (YuiKaoriSurfaceView) findViewById(R.id.lunar);
         mYuiKaoriThread = mYuiKaoriView.getThread();
 
