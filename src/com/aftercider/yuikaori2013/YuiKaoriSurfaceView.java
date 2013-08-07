@@ -72,6 +72,7 @@ class YuiKaoriSurfaceView extends SurfaceView implements SurfaceHolder.Callback 
         public static final int STATE_READY = 3;
         public static final int STATE_RUNNING = 4;
         public static final int STATE_WIN = 5;
+        public static final int STATE_END = 6;
 
         /*
          * Goal condition constants
@@ -301,23 +302,14 @@ class YuiKaoriSurfaceView extends SurfaceView implements SurfaceHolder.Callback 
                     mGoalX = (int) (Math.random() * (mCanvasWidth - mGoalWidth));
                     if (Math.abs(mGoalX - (mX - mLanderWidth / 2)) > mCanvasHeight / 6)
                         break;
+                    if(mMode == STATE_END){
+                    	break;
+                    }
                 }
-
-                mLastTime = System.currentTimeMillis() + 100;
-                setState(STATE_RUNNING);
             }
         }
 
-        /**
-         * Pauses the physics update & animation.
-         */
-        public void pause() {
-            synchronized (mSurfaceHolder) {
-                if (mMode == STATE_RUNNING) setState(STATE_PAUSE);
-            }
-        }
-
-        /**
+                /**
          * Restores game state from the indicated Bundle. Typically called when
          * the Activity is being restored after having been previously
          * destroyed.
@@ -568,7 +560,6 @@ class YuiKaoriSurfaceView extends SurfaceView implements SurfaceHolder.Callback 
                         return true;
                         // up -> pause
                     } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                        pause();
                         return true;
                     }
                 }
@@ -812,32 +803,6 @@ class YuiKaoriSurfaceView extends SurfaceView implements SurfaceHolder.Callback 
      */
     public YuiKaoriThread getThread() {
         return thread;
-    }
-
-    /**
-     * Standard override to get key-press events.
-     */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent msg) {
-        return thread.doKeyDown(keyCode, msg);
-    }
-
-    /**
-     * Standard override for key-up. We actually care about these, so we can
-     * turn off the engine or stop rotating.
-     */
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent msg) {
-        return thread.doKeyUp(keyCode, msg);
-    }
-
-    /**
-     * Standard window-focus override. Notice focus lost so we can pause on
-     * focus lost. e.g. user switches to take a call.
-     */
-    @Override
-    public void onWindowFocusChanged(boolean hasWindowFocus) {
-        if (!hasWindowFocus) thread.pause();
     }
 
     /**
